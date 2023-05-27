@@ -10,18 +10,18 @@ button_common_settings = {
 
 class Cell:
     mem_colors = {
-        False: '#FFB2B8',
-        True: 'red',
+        True: '#60A917',
+        False: '#008A00',
     }
 
     inter_colors = {
-        False: '#9B9BFF',
-        True: 'blue',
+        True: '#1BA1E2',
+        False: '#0050EF',
     }
 
     logic_colors = {
-        False: '#BAFFBA',
-        True: 'green',
+        True: '#D80073',
+        False: '#A20025',
     }
 
     button_size = 20
@@ -30,11 +30,11 @@ class Cell:
         self.gol_cell = gol_cell
         self.grid = grid
 
-        self.cell = tkinter.Frame(widget, pady=4, padx=4)
+        self.cell = tkinter.Frame(widget, pady=10, padx=10, bg='black', highlightbackground="white", highlightthickness=2)
         self.cell.grid(row=y, column=x)
 
-        self.mem_button = tkinter.Button(self.cell, command=self.flip_gol_cell, width=self.button_size*2+4, height=self.button_size*2, **button_common_settings)
-        self.mem_button.grid(column=2, row=2, columnspan=2, rowspan=2)
+        self.mem_button = tkinter.Button(self.cell, command=self.flip_gol_cell, width=self.button_size, height=self.button_size, **button_common_settings)
+        self.mem_button.grid(column=3, row=3)
 
         self.inter_buttons = self.init_inter_buttons()
         self.logic_buttons = self.init_logic_buttons()
@@ -47,17 +47,17 @@ class Cell:
         inter_buttons = []
 
         for column, row, columnspan, rowspan in (
-                (0, 0, 2, 1),
-                (2, 0, 2, 1),
-                (4, 0, 2, 1),
-                (0, 1, 2, 4),
-                (4, 1, 2, 4),
-                (0, 5, 2, 1),
-                (2, 5, 2, 1),
-                (4, 5, 2, 1),
+                (1, 1, 1, 1),
+                (3, 0, 1, 1),
+                (5, 1, 1, 1),
+                (0, 3, 1, 1),
+                (6, 3, 1, 1),
+                (1, 5, 1, 1),
+                (3, 6, 1, 1),
+                (5, 5, 1, 1),
         ):
 
-            inter_buttons.append(tkinter.Button(self.cell, state=tkinter.DISABLED, width=self.button_size*columnspan, height=self.button_size*rowspan, **button_common_settings))
+            inter_buttons.append(tkinter.Button(self.cell, state=tkinter.DISABLED, width=self.button_size, height=self.button_size, **button_common_settings))
             inter_buttons[-1].grid(column=column, row=row, columnspan=columnspan, rowspan=rowspan)
 
         return inter_buttons
@@ -66,9 +66,9 @@ class Cell:
         logic_buttons = []
 
         for column, row in (
-                (2, 1),
-                (3, 1),
-                (2, 4),
+                (3, 2),
+                (2, 3),
+                (4, 3),
                 (3, 4),
         ):
 
@@ -83,8 +83,10 @@ class Cell:
         for i in range(8):
             self.inter_buttons[i].configure(bg=self.inter_colors[self.gol_cell.neighbors[i].is_alive])
 
-        for logic_button in self.logic_buttons:
-            logic_button.configure(bg=self.logic_colors[False])
+        self.logic_buttons[0].configure(bg=self.logic_colors[self.gol_cell.neighbors[1].is_alive or self.gol_cell.neighbors[2].is_alive])
+        self.logic_buttons[1].configure(bg=self.logic_colors[self.gol_cell.neighbors[0].is_alive or self.gol_cell.neighbors[3].is_alive])
+        self.logic_buttons[2].configure(bg=self.logic_colors[self.gol_cell.neighbors[4].is_alive or self.gol_cell.neighbors[7].is_alive])
+        self.logic_buttons[3].configure(bg=self.logic_colors[self.gol_cell.neighbors[5].is_alive or self.gol_cell.neighbors[6].is_alive])
 
 
 class Grid:
