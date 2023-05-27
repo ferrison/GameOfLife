@@ -33,7 +33,7 @@ class Cell:
         self.cell = tkinter.Frame(widget, pady=10, padx=10, bg='black', highlightbackground="white", highlightthickness=2)
         self.cell.grid(row=y, column=x)
 
-        self.mem_button = tkinter.Button(self.cell, command=self.flip_gol_cell, width=self.button_size, height=self.button_size, **button_common_settings)
+        self.mem_button = tkinter.Button(self.cell, text="ЭП", fg="white", compound="center", command=self.flip_gol_cell, width=self.button_size, height=self.button_size, **button_common_settings)
         self.mem_button.grid(column=3, row=3)
 
         self.inter_buttons = self.init_inter_buttons()
@@ -57,7 +57,7 @@ class Cell:
                 (5, 5, 1, 1),
         ):
 
-            inter_buttons.append(tkinter.Button(self.cell, state=tkinter.DISABLED, width=self.button_size, height=self.button_size, **button_common_settings))
+            inter_buttons.append(tkinter.Button(self.cell, text="ЛЭ", fg="white", compound="center", width=self.button_size, height=self.button_size, **button_common_settings))
             inter_buttons[-1].grid(column=column, row=row, columnspan=columnspan, rowspan=rowspan)
 
         return inter_buttons
@@ -72,7 +72,7 @@ class Cell:
                 (3, 4),
         ):
 
-            logic_buttons.append(tkinter.Button(self.cell, state=tkinter.DISABLED, width=self.button_size, height=self.button_size, **button_common_settings))
+            logic_buttons.append(tkinter.Button(self.cell, text="ЭВЗ", fg="white", compound="center", width=self.button_size, height=self.button_size, **button_common_settings))
             logic_buttons[-1].grid(column=column, row=row)
 
         return logic_buttons
