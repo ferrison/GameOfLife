@@ -1,0 +1,12 @@
+{
+  "each_cell": {
+    "alivness_rule": {
+      "overpopulating": 4, "underpopulating": 1, "born": 3
+    }
+  },
+  "1,2": {
+    "dead_rule": {
+      "from_step": 5
+    }
+  }
+}
