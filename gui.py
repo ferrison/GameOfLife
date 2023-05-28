@@ -99,6 +99,9 @@ class Cell:
         self.logic_buttons[2].configure(bg=self.logic_colors[self.gol_cell.neighbors[4].is_alive or self.gol_cell.neighbors[7].is_alive])
         self.logic_buttons[3].configure(bg=self.logic_colors[self.gol_cell.neighbors[5].is_alive or self.gol_cell.neighbors[6].is_alive])
 
+    def destroy(self):
+        self.cell.grid_forget()
+
 
 class Grid:
     def __init__(self, widget, gol_grid):
@@ -114,3 +117,13 @@ class Grid:
     def update(self):
         for cell in self.cells:
             cell.update(self.highlight_only_mem)
+
+    def reset(self, gol_grid):
+        self._destroy()
+        for y, row in enumerate(gol_grid.grid):
+            for x, gol_cell in enumerate(row):
+                self.cells.append(Cell(self.grid, x, y, gol_cell, self))
+
+    def _destroy(self):
+        for cell in self.cells:
+            cell.destroy()

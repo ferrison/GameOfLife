@@ -91,6 +91,23 @@ def main():
         command=highlight
     )
     highlight_button.grid(row=0, column=2)
+
+    def reset():
+        global gol_grid, game_running
+        nonlocal grid
+        gol_grid = game_of_life.Grid(grid_height, grid_width)
+        load_rules(gol_grid)
+        grid.reset(gol_grid)
+        grid.update()
+
+
+
+    reset_button = tkinter.Button(
+        command_frame,
+        text='Сброс',
+        command=reset
+    )
+    reset_button.grid(row=0, column=3)
     def set_speed(new_speed):
         global speed
         speed = int(new_speed)
