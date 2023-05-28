@@ -10,18 +10,18 @@ button_common_settings = {
 
 class Cell:
     mem_colors = {
-        True: '#60A917',
-        False: '#008A00',
+        True: '#008A00',
+        False: '#6FF07C',
     }
 
     inter_colors = {
-        True: '#1BA1E2',
-        False: '#0050EF',
+        True: '#0050EF',
+        False: '#A6CAFF',
     }
 
     logic_colors = {
-        True: '#D80073',
-        False: '#A20025',
+        True: '#A20025',
+        False: '#FFA6BB',
     }
 
     button_size = 20

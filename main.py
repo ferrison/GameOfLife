@@ -26,7 +26,7 @@ def load_rules(grid):
 
 def main():
     root = tkinter.Tk()
-    root.title("Игра жызнь")
+    root.title("Игра жизнь")
 
     game_running = False
     speed = SPEED_MIN
