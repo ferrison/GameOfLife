@@ -78,6 +78,19 @@ def main():
     speed_scale_frame = tkinter.Frame(root, borderwidth=10)
     speed_scale_frame.pack(side=tkinter.TOP)
 
+    def highlight():
+        grid.highlight_only_mem = not grid.highlight_only_mem
+        grid.update()
+        if grid.highlight_only_mem:
+            highlight_button.configure(text='Подсвечивать все')
+        else:
+            highlight_button.configure(text='Подсвечивать только ЭП')
+    highlight_button = tkinter.Button(
+        command_frame,
+        text='Подсвечивать только ЭП',
+        command=highlight
+    )
+    highlight_button.grid(row=0, column=2)
     def set_speed(new_speed):
         global speed
         speed = int(new_speed)

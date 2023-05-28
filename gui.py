@@ -77,8 +77,19 @@ class Cell:
 
         return logic_buttons
 
-    def update(self):
+    def update(self, highlight_only_mem):
         self.mem_button.configure(bg=self.mem_colors[self.gol_cell.is_alive])
+
+        if highlight_only_mem:
+            for i in range(8):
+                self.inter_buttons[i].configure(bg=self.inter_colors[False])
+
+            self.logic_buttons[0].configure(bg=self.logic_colors[False])
+            self.logic_buttons[1].configure(bg=self.logic_colors[False])
+            self.logic_buttons[2].configure(bg=self.logic_colors[False])
+            self.logic_buttons[3].configure(bg=self.logic_colors[False])
+
+            return
 
         for i in range(8):
             self.inter_buttons[i].configure(bg=self.inter_colors[self.gol_cell.neighbors[i].is_alive])
@@ -92,6 +103,7 @@ class Cell:
 class Grid:
     def __init__(self, widget, gol_grid):
         self.grid = tkinter.Frame(widget)
+        self.highlight_only_mem = False
         self.grid.pack()
         self.cells = []
 
@@ -101,4 +113,4 @@ class Grid:
 
     def update(self):
         for cell in self.cells:
-            cell.update()
+            cell.update(self.highlight_only_mem)
