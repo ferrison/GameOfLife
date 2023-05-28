@@ -1,4 +1,4 @@
-def alivness_rule(overpopulating, underpopulating, born, from_step=0):
+def aliveness_rule(overpopulating, underpopulating, born, from_step=0):
     def rule(cell):
         if cell.grid.current_step >= from_step:
             alive_neighbors = len([n for n in cell.neighbors if n.is_alive])

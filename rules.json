@@ -1,12 +1,19 @@
 {
-  "each_cell": {
-    "alivness_rule": {
-      "overpopulating": 4, "underpopulating": 1, "born": 3
+  "each_cell":
+    [
+      {
+        "name": "aliveness_rule",
+        "params": {"overpopulating": 4, "underpopulating": 1, "born": 3}
+      },
+      {
+        "name": "aliveness_rule",
+        "params": {"overpopulating": 3, "underpopulating": 1, "born": 2, "from_step": 10}
+      }
+    ],
+  "1,2": [
+    {
+      "name": "dead_rule",
+      "params": {"from_step": 5}
     }
-  },
-  "1,2": {
-    "dead_rule": {
-      "from_step": 5
-    }
-  }
+  ]
 }

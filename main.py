@@ -8,40 +8,30 @@ import rules
 
 SPEED_MIN = 1
 SPEED_MAX = 10
-
-grid_height = grid_width = 5
-gol_grid = game_of_life.Grid(grid_height, grid_width)
-
-game_running = False
-speed = SPEED_MIN
-
-exit_flag = False
+GRID_HEIGHT = GRID_WIDTH = 5
 
 
 def load_rules(grid):
     config = json.loads(pathlib.Path('rules.json').read_text())
     if 'each_cell' in config:
-        for rule, params in config['each_cell'].items():
-            grid.set_rule_to_each_cell(getattr(rules, rule)(**params))
+        for rule in config['each_cell']:
+            grid.set_rule_to_each_cell(getattr(rules, rule["name"])(**rule["params"]))
         config.pop('each_cell')
     for cell_coords in config:
-        x, y = cell_coords.split(',')
-        x, y = int(x), int(y)
-        for rule, params in config[cell_coords].items():
-            grid[x, y].rules.append(getattr(rules, rule)(**params))
+        x, y = map(int, cell_coords.split(','))
+        for rule in config[cell_coords]:
+            grid[x, y].rules.append(getattr(rules, rule["name"])(**rule["params"]))
 
 
 def main():
     root = tkinter.Tk()
     root.title("Игра жызнь")
+
+    game_running = False
+    speed = SPEED_MIN
+
+    gol_grid = game_of_life.Grid(GRID_HEIGHT, GRID_WIDTH)
     load_rules(gol_grid)
-
-    def on_exit():
-        global exit_flag
-        exit_flag = True
-        root.destroy()
-
-    root.protocol("WM_DELETE_WINDOW", on_exit)
 
     import gui
     grid = gui.Grid(root, gol_grid)
@@ -62,7 +52,7 @@ def main():
     step_button.grid(row=0, column=0)
 
     def continue_():
-        global game_running
+        nonlocal game_running
         game_running = not game_running
         if game_running:
             continue_button.configure(text='Остановить')
@@ -102,6 +92,7 @@ def main():
         command=reset
     )
     reset_button.grid(row=0, column=3)
+
     def set_speed(new_speed):
         global speed
         speed = int(new_speed)
@@ -119,7 +110,6 @@ def main():
         if game_running:
             gol_grid.next_step()
             grid.update()
-
     game_runner()
 
     root.mainloop()
