@@ -15,6 +15,11 @@ class Cell:
         self.is_alive = self.is_alive_in_next_step
         self.is_alive_in_next_step = None
 
+    def reset(self):
+        self.is_alive = False
+        self.is_alive_in_next_step = None
+        self.rules = []
+
 
 class Grid:
     def __init__(self, height, width):
@@ -72,3 +77,9 @@ class Grid:
         self.current_step += 1
 
         return self.get_states()
+
+    def reset(self):
+        self.current_step = 0
+        for row in self.grid:
+            for cell in row:
+                cell.reset()

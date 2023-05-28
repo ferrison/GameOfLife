@@ -93,15 +93,9 @@ def main():
     highlight_button.grid(row=0, column=2)
 
     def reset():
-        global gol_grid, game_running
-        nonlocal grid
-        gol_grid = game_of_life.Grid(grid_height, grid_width)
+        gol_grid.reset()
         load_rules(gol_grid)
-        grid.reset(gol_grid)
         grid.update()
-
-
-
     reset_button = tkinter.Button(
         command_frame,
         text='Сброс',
