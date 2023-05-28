@@ -10,7 +10,7 @@
         "params": {"overpopulating": 3, "underpopulating": 1, "born": 2, "from_step": 10}
       }
     ],
-  "1,2": [
+  "1,2;2,2": [
     {
       "name": "dead_rule",
       "params": {"from_step": 5}

@@ -18,9 +18,10 @@ def load_rules(grid):
             grid.set_rule_to_each_cell(getattr(rules, rule["name"])(**rule["params"]))
         config.pop('each_cell')
     for cell_coords in config:
-        x, y = map(int, cell_coords.split(','))
         for rule in config[cell_coords]:
-            grid[x, y].rules.append(getattr(rules, rule["name"])(**rule["params"]))
+            for coord in cell_coords.split(';'):
+                x, y = map(int, coord.split(','))
+                grid[x, y].rules.append(getattr(rules, rule["name"])(**rule["params"]))
 
 
 def main():
