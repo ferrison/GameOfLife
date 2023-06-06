@@ -99,6 +99,15 @@ class Cell:
         self.logic_buttons[2].configure(bg=self.logic_colors[self.gol_cell.neighbors[4].is_alive or self.gol_cell.neighbors[7].is_alive])
         self.logic_buttons[3].configure(bg=self.logic_colors[self.gol_cell.neighbors[5].is_alive or self.gol_cell.neighbors[6].is_alive])
 
+    def resize(self, delta):
+        self.button_size += delta
+
+        self.mem_button.configure(width=self.button_size, height=self.button_size)
+        for inter_button in self.inter_buttons:
+            inter_button.configure(width=self.button_size, height=self.button_size)
+        for logic_button in self.logic_buttons:
+            logic_button.configure(width=self.button_size, height=self.button_size)
+
 
 class Grid:
     def __init__(self, widget, gol_grid):
@@ -115,6 +124,8 @@ class Grid:
                 self.canvas.yview_scroll(int(-1 * (event.delta / 120)), 'units')
             if event.state == 1:
                 self.canvas.xview_scroll(int(-1 * (event.delta / 120)), 'units')
+            if event.state == 4:
+                self.resize_cells(2*(event.delta // 120))
         self.canvas.bind_all("<MouseWheel>", mouse_scroll)
 
         self.grid = tkinter.Frame(widget)
@@ -134,3 +145,7 @@ class Grid:
     def update(self):
         for cell in self.cells:
             cell.update(self.highlight_only_mem)
+
+    def resize_cells(self, new_size):
+        for cell in self.cells:
+            cell.resize(new_size)
