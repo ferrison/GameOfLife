@@ -1,14 +1,13 @@
 import json
 import pathlib
 import tkinter
-from time import sleep
 
 import game_of_life
 import rules
 
 SPEED_MIN = 1
 SPEED_MAX = 10
-GRID_HEIGHT = GRID_WIDTH = 5
+GRID_HEIGHT = GRID_WIDTH = 10
 
 
 def load_rules(grid):
@@ -35,11 +34,42 @@ def main():
     load_rules(gol_grid)
 
     import gui
+    frame = tkinter.Frame(root, bd=5)
+    frame.pack()
+
+    scrollbar = tkinter.Scrollbar(frame, orient=tkinter.VERTICAL)
+    scrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y, expand=True)
+
+    canvas = tkinter.Canvas(frame, bd=1, highlightthickness=0, height=800, yscrollcommand=scrollbar.set)
+    canvas.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
+
+    scrollbar.config(command=canvas.yview)
+
     grid = gui.Grid(root, gol_grid)
+    grid_id = canvas.create_window((0, 0), window=grid.grid, anchor=tkinter.NW)
     grid.update()
 
+    def _configure_grid(event):
+        # Update the scrollbars to match the size of the inner frame.
+        size = (grid.grid.winfo_reqwidth(), grid.grid.winfo_reqheight())
+        canvas.config(scrollregion="0 0 %s %s" % size)
+        if grid.grid.winfo_reqwidth() != canvas.winfo_width():
+            # Update the canvas's width to fit the inner frame.
+            canvas.config(width=grid.grid.winfo_reqwidth())
+
+    grid.grid.bind('<Configure>', _configure_grid)
+    _configure_grid(None)
+
+    def _configure_canvas(event):
+        if grid.grid.winfo_reqwidth() != canvas.winfo_width():
+            # Update the inner frame's width to fill the canvas.
+            canvas.itemconfigure(grid_id, width=canvas.winfo_width())
+
+    canvas.bind('<Configure>', _configure_canvas)
+    _configure_canvas(None)
+
     command_frame = tkinter.Frame(root, borderwidth=10)
-    command_frame.pack(side=tkinter.TOP)
+    command_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
     def step():
         if not game_running:
@@ -65,9 +95,6 @@ def main():
         command=continue_
     )
     continue_button.grid(row=0, column=1)
-
-    speed_scale_frame = tkinter.Frame(root, borderwidth=10)
-    speed_scale_frame.pack(side=tkinter.TOP)
 
     def highlight():
         grid.highlight_only_mem = not grid.highlight_only_mem
@@ -98,13 +125,13 @@ def main():
         global speed
         speed = int(new_speed)
     speed_scale = tkinter.Scale(
-        speed_scale_frame,
+        command_frame,
         from_=SPEED_MIN,
         to=SPEED_MAX,
         orient=tkinter.HORIZONTAL,
         command=set_speed
     )
-    speed_scale.grid(row=0, column=0)
+    speed_scale.grid(row=0, column=4, padx=20)
 
     def game_runner():
         root.after(1000 // speed, game_runner)
