@@ -105,43 +105,24 @@ class Grid:
         self.widget = widget
 
         self.frame = tkinter.Frame(widget, bd=5)
-        self.frame.pack()
+        self.frame.pack(expand=True, fill=tkinter.BOTH)
 
-        self.yscrollbar = tkinter.Scrollbar(self.frame, orient=tkinter.VERTICAL)
-        self.yscrollbar.pack(side=tkinter.RIGHT, fill=tkinter.Y, expand=True)
-
-        self.canvas = tkinter.Canvas(self.frame, bd=1, highlightthickness=0, height=800, yscrollcommand=self.yscrollbar.set)
+        self.canvas = tkinter.Canvas(self.frame, bd=1, highlightthickness=0)
         self.canvas.pack(side=tkinter.LEFT, fill=tkinter.BOTH, expand=True)
 
-        self.yscrollbar.config(command=self.canvas.yview)
+        def mouse_scroll(event):
+            if event.state == 0:
+                self.canvas.yview_scroll(int(-1 * (event.delta / 120)), 'units')
+            if event.state == 1:
+                self.canvas.xview_scroll(int(-1 * (event.delta / 120)), 'units')
+        self.canvas.bind_all("<MouseWheel>", mouse_scroll)
 
-        self.grid = tkinter.Frame(widget)
-        self.grid.pack()
-
-        self.grid_id = self.canvas.create_window((0, 0), window=self.grid, anchor=tkinter.NW)
-
-
-        def _configure_widget(event):
-            self.canvas.config(height=self.widget.winfo_height()-74)
-
-        self.widget.bind('<Configure>', _configure_widget)
+        self.grid = tkinter.Frame(widget, bg='green')
+        self.canvas.create_window((0, 0), window=self.grid, anchor=tkinter.NW)
 
         def _configure_grid(event):
-            # Update the scrollbars to match the size of the inner frame.
-            size = (self.grid.winfo_reqwidth(), self.grid.winfo_reqheight())
-            self.canvas.config(scrollregion="0 0 %s %s" % size)
-            if self.grid.winfo_reqwidth() != self.canvas.winfo_width():
-                # Update the canvas's width to fit the inner frame.
-                self.canvas.config(width=self.grid.winfo_reqwidth())
-
+            self.canvas.config(scrollregion=self.canvas.bbox('all'))
         self.grid.bind('<Configure>', _configure_grid)
-
-        def _configure_canvas(event):
-            if self.grid.winfo_reqwidth() != self.canvas.winfo_width():
-                # Update the inner frame's width to fill the canvas.
-                self.canvas.itemconfigure(self.grid_id, width=self.canvas.winfo_width())
-
-        self.canvas.bind('<Configure>', _configure_canvas)
 
         self.highlight_only_mem = False
         self.cells = []

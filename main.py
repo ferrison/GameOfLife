@@ -25,6 +25,7 @@ def load_rules(grid):
 
 def main():
     root = tkinter.Tk()
+    root.geometry("1000x1000")
     root.title("Игра жизнь")
 
     game_running = False
