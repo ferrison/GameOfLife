@@ -41,16 +41,20 @@ def main():
     command_frame = tkinter.Frame(root, borderwidth=10)
     command_frame.pack(side=tkinter.BOTTOM, fill=tkinter.X)
 
+    step_label = tkinter.Label(command_frame, text="Текущий шаг: 0")
+    step_label.grid(row=0, column=1, padx=20)
+
     def step():
         if not game_running:
             gol_grid.next_step()
             grid.update()
+            step_label.configure(text=f"Текущий шаг: {gol_grid.current_step}")
     step_button = tkinter.Button(
         command_frame,
         text='Шаг',
         command=step
     )
-    step_button.grid(row=0, column=0)
+    step_button.grid(row=0, column=2)
 
     def continue_():
         nonlocal game_running
@@ -64,7 +68,7 @@ def main():
         text='Продолжить',
         command=continue_
     )
-    continue_button.grid(row=0, column=1)
+    continue_button.grid(row=0, column=3)
 
     def highlight():
         grid.highlight_only_mem = not grid.highlight_only_mem
@@ -78,21 +82,22 @@ def main():
         text='Подсвечивать только ЭП',
         command=highlight
     )
-    highlight_button.grid(row=0, column=2)
+    highlight_button.grid(row=0, column=4)
 
     def reset():
         gol_grid.reset()
         load_rules(gol_grid)
         grid.update()
+        step_label.configure(text=f"Текущий шаг: 0")
     reset_button = tkinter.Button(
         command_frame,
         text='Сброс',
         command=reset
     )
-    reset_button.grid(row=0, column=3)
+    reset_button.grid(row=0, column=5)
 
     def set_speed(new_speed):
-        global speed
+        nonlocal speed
         speed = int(new_speed)
     speed_scale = tkinter.Scale(
         command_frame,
@@ -101,13 +106,17 @@ def main():
         orient=tkinter.HORIZONTAL,
         command=set_speed
     )
-    speed_scale.grid(row=0, column=4, padx=20)
+    speed_scale.grid(row=0, column=6, padx=40)
+
+    command_frame.columnconfigure(0, weight=1)
+    command_frame.columnconfigure(7, weight=1)
 
     def game_runner():
         root.after(1000 // speed, game_runner)
         if game_running:
             gol_grid.next_step()
             grid.update()
+            step_label.configure(text=f"Текущий шаг: {gol_grid.current_step}")
     game_runner()
 
     root.mainloop()
