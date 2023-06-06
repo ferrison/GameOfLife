@@ -111,8 +111,6 @@ class Cell:
 
 class Grid:
     def __init__(self, widget, gol_grid):
-        self.widget = widget
-
         self.frame = tkinter.Frame(widget, bd=5)
         self.frame.pack(expand=True, fill=tkinter.BOTH)
 
