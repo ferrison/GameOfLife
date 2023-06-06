@@ -1,0 +1,15 @@
+{
+  "mem_colors": {
+    "True": "#008A00",
+    "False": "#6FF07C"
+  },
+  "inter_colors": {
+    "True": "#0050EF",
+    "False": "#A6CAFF"
+  },
+  "logic_colors": {
+    "True": "#A20025",
+    "False": "#FFA6BB"
+  },
+  "button_size": 20
+}

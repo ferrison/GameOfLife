@@ -23,6 +23,26 @@ def load_rules(grid):
                 grid[x, y].rules.append(getattr(rules, rule["name"])(**rule["params"]))
 
 
+def map_booleans(value):
+    if not isinstance(value, dict):
+        if value=='True':
+            return True
+        if value=='False':
+            return False
+        return value
+    res = {}
+    for k, v in value.items():
+        res[map_booleans(k)] = map_booleans(v)
+    return res
+
+
+def load_config():
+    import gui
+    config = json.loads(pathlib.Path('config.json').read_text())
+    for k, v in config.items():
+        setattr(gui.Cell, map_booleans(k), map_booleans(v))
+
+
 def main():
     root = tkinter.Tk()
     root.geometry("1000x1000")
@@ -35,6 +55,7 @@ def main():
     load_rules(gol_grid)
 
     import gui
+    load_config()
     grid = gui.Grid(root, gol_grid)
     grid.update()
 
