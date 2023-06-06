@@ -117,7 +117,7 @@ class Grid:
                 self.canvas.xview_scroll(int(-1 * (event.delta / 120)), 'units')
         self.canvas.bind_all("<MouseWheel>", mouse_scroll)
 
-        self.grid = tkinter.Frame(widget, bg='green')
+        self.grid = tkinter.Frame(widget)
         self.canvas.create_window((0, 0), window=self.grid, anchor=tkinter.NW)
 
         def _configure_grid(event):
